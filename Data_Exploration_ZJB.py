@@ -430,7 +430,7 @@ X200.pop('release_date')
 X200
 
 
-# In[250]:
+# In[277]:
 
 
 #Logistic Regression for Profit
@@ -438,40 +438,41 @@ from sklearn.model_selection import train_test_split
 X_train,X_test, y_train,y_test=train_test_split(X200,y99, test_size=.2, random_state=0)
 
 
-# In[251]:
+# In[278]:
 
 
 len(X_test)
 
 
-# In[252]:
+# In[279]:
 
 
 X_train,x_val,y_train,y_val=train_test_split(X_test,y_test, test_size=.5, random_state=0)
 
 
-# In[253]:
+# In[280]:
 
 
 len(x_val)
 
 
-# In[255]:
+# In[281]:
 
 
 len(y_val)
 
 
-# In[259]:
+# In[282]:
 
 
 from sklearn.preprocessing import StandardScaler
 sc=StandardScaler()
 X_train=sc.fit_transform(X_train)
 X_test=sc.fit_transform(X_test)
+x_val=sc.fit_transform(x_val)
 
 
-# In[265]:
+# In[283]:
 
 
 from sklearn.linear_model import LogisticRegression
@@ -479,25 +480,31 @@ classifier=LogisticRegression(random_state=0)
 classifier.fit(x_val,y_val)
 
 
-# In[272]:
+# In[284]:
 
 
 y_pred=classifier.predict(x_val)
 
 
-# In[273]:
+# In[285]:
 
 
 y_pred
 
 
-# In[274]:
+# In[291]:
+
+
+y_val
+
+
+# In[286]:
 
 
 len(y_pred)
 
 
-# In[275]:
+# In[287]:
 
 
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report,ConfusionMatrixDisplay
@@ -505,7 +512,7 @@ cm=confusion_matrix(y_val,y_pred)
 print(cm)
 
 
-# In[276]:
+# In[288]:
 
 
 import matplotlib.pyplot as plt
@@ -519,10 +526,10 @@ plt.show()
 #2 is false negative=made profit, predicted not to
 
 
-# In[270]:
+# In[290]:
 
 
-accuracy_score(y_test,y_pred)
+accuracy_score(y_val,y_pred)
 
 
 # In[49]:
