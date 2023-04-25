@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[84]:
+# In[1]:
 
 
 import requests
@@ -10,7 +10,7 @@ import json
 import glob
 
 
-# In[85]:
+# In[2]:
 
 
 #Pulling data from TMDb, "Popular" section, and putting it into dataframe.
@@ -30,7 +30,7 @@ sub_dict = json_data["results"]
 df = pd.DataFrame.from_dict(sub_dict)
 
 
-# In[86]:
+# In[3]:
 
 
 #Selecting what info I want to include in a new dataframe.
@@ -38,13 +38,13 @@ newdf=df[['id','release_date','popularity','title','vote_average','vote_count','
 newdf=newdf.rename(columns={'id':'ID','genre_ids':'Genre'})
 
 
-# In[87]:
+# In[4]:
 
 
 newdf 
 
 
-# In[88]:
+# In[5]:
 
 
 ##Pulling data from TMDb, "Top Rated" section, and putting it into dataframe.
@@ -65,7 +65,7 @@ sub_dict1 = json_data1["results"]
 df2 = pd.DataFrame.from_dict(sub_dict1)
 
 
-# In[89]:
+# In[6]:
 
 
 #Again selecting the data that I want from the df
@@ -74,7 +74,7 @@ newdf1=newdf1.rename(columns={'id':'ID','genre_ids':'Genre'})
 newdf1
 
 
-# In[90]:
+# In[7]:
 
 
 #Create a df for Budget and Revenue.
@@ -82,7 +82,8 @@ newdf1
 import pandas as pd
 import numpy as np
 df3 = pd.DataFrame({'Budget': [],
-                   'Revenue': [],})
+                   'Revenue': [],
+                   'Runtime':[]})
 for ID in newdf['ID']:  ##<-- you didn't have the ['ID] part.
     print(ID)
     url2 = 'https://api.themoviedb.org/3/movie/'+str(ID)+'?api_key=c680984d1f261c766c61129ac1b932fa'
@@ -90,11 +91,12 @@ for ID in newdf['ID']:  ##<-- you didn't have the ['ID] part.
     json_data2 = response2.json()
     list1=json_data2['budget']
     list2=json_data2['revenue']
-    print('Budget '+str(list1)+'\nRevenue '+str(list2))
-    df3.loc[len(df3)] = list1, list2
+    list6745=json_data2['runtime']
+    print('Budget '+str(list1)+'\nRevenue '+str(list2)+'\nRuntime'+str(list6745))
+    df3.loc[len(df3)] = list1, list2, list6745
 
 
-# In[91]:
+# In[8]:
 
 
 #Join the df containing the "Popular" movies and the df with its corresponding budget/revenue.
@@ -102,7 +104,7 @@ final1=pd.concat([newdf, df3], axis=1, join='inner')
 final1
 
 
-# In[92]:
+# In[9]:
 
 
 #Create a df for Budget and Revenue.
@@ -110,7 +112,8 @@ final1
 import pandas as pd
 import numpy as np
 df4 = pd.DataFrame({'Budget': [],
-                   'Revenue': [],})
+                   'Revenue': [],
+                   'Runtime':[]})
 for ID in newdf1['ID']: 
     print(ID)
     url3 = 'https://api.themoviedb.org/3/movie/'+str(ID)+'?api_key=c680984d1f261c766c61129ac1b932fa'
@@ -118,11 +121,12 @@ for ID in newdf1['ID']:
     json_data3 = response3.json()
     list3=json_data3['budget']
     list4=json_data3['revenue']
-    print('Budget '+str(list3)+'\nRevenue '+str(list4))
-    df4.loc[len(df4)] = list3, list4
+    list393=json_data3['runtime']
+    print('Budget '+str(list3)+'\nRevenue '+str(list4)+'\nRuntime'+str(list393))
+    df4.loc[len(df4)] = list3, list4, list393
 
 
-# In[93]:
+# In[10]:
 
 
 #Join the df containing the "Top Rated" movies and the df with its corresponding budget/revenue.
@@ -131,7 +135,7 @@ final2=pd.concat([newdf1, df4], axis=1, join='inner')
 final2
 
 
-# In[94]:
+# In[11]:
 
 
 # Merging the dataframes for Popular and Top Rated movies into one df
@@ -139,7 +143,7 @@ final3 = final1.append(final2, ignore_index=True)
 final3
 
 
-# In[95]:
+# In[12]:
 
 
 ##Pulling data from TMDb, "Now Playing" section, and putting it into dataframe.
@@ -160,7 +164,7 @@ sub_dict3 = json_data5["results"]
 df5 = pd.DataFrame.from_dict(sub_dict3)
 
 
-# In[96]:
+# In[13]:
 
 
 newdf2=df5[['id','release_date','popularity','title','vote_average','vote_count','genre_ids']]
@@ -168,7 +172,7 @@ newdf2=newdf2.rename(columns={'id':'ID','genre_ids':'Genre'})
 newdf2
 
 
-# In[97]:
+# In[14]:
 
 
 #Create a df for Budget and Revenue.
@@ -177,7 +181,8 @@ newdf2
 import pandas as pd
 import numpy as np
 df6 = pd.DataFrame({'Budget': [],
-                   'Revenue': [],})
+                   'Revenue': [],
+                   'Runtime':[]})
 for ID in newdf2['ID']: 
     print(ID)
     url6 = 'https://api.themoviedb.org/3/movie/'+str(ID)+'?api_key=c680984d1f261c766c61129ac1b932fa'
@@ -185,11 +190,12 @@ for ID in newdf2['ID']:
     json_data6 = response6.json()
     list5=json_data6['budget']
     list6=json_data6['revenue']
-    print('Budget '+str(list5)+'\nRevenue '+str(list6))
-    df6.loc[len(df6)] = list5, list6
+    list7=json_data6['runtime']
+    print('Budget '+str(list5)+'\nRevenue '+str(list6)+'\nRuntime '+str(list7))
+    df6.loc[len(df6)] = list5, list6, list7
 
 
-# In[98]:
+# In[15]:
 
 
 #Join the df containing the "Now Playing" movies and the df with its corresponding budget/revenue.
@@ -198,7 +204,7 @@ final5=pd.concat([newdf2, df6], axis=1, join='inner')
 final5
 
 
-# In[99]:
+# In[16]:
 
 
 #Adding the Now Playing df to the df we created that already has the Popular and Top Rated movies.
@@ -206,7 +212,7 @@ final6 = final3.append(final5, ignore_index=True)
 final6
 
 
-# In[100]:
+# In[17]:
 
 
 #use this to try to find more movies to add.
@@ -226,7 +232,7 @@ sub_dict6 = json_data8["results"]
 df8 = pd.DataFrame.from_dict(sub_dict6)
 
 
-# In[101]:
+# In[18]:
 
 
 newdf3=df8[['id','release_date','popularity','title','vote_average','vote_count','genre_ids']]
@@ -234,13 +240,14 @@ newdf3=newdf3.rename(columns={'id':'ID','genre_ids':'Genre'})
 newdf3
 
 
-# In[102]:
+# In[19]:
 
 
 import pandas as pd
 import numpy as np
 df9 = pd.DataFrame({'Budget': [],
-                   'Revenue': [],})
+                   'Revenue': [],
+                   'Runtime':[]})
 for ID in newdf3['ID']: 
     print(ID)
     url9 = 'https://api.themoviedb.org/3/movie/'+str(ID)+'?api_key=c680984d1f261c766c61129ac1b932fa'
@@ -248,25 +255,26 @@ for ID in newdf3['ID']:
     json_data9 = response9.json()
     list8=json_data9['budget']
     list9=json_data9['revenue']
-    print('Budget '+str(list8)+'\nRevenue '+str(list9))
-    df9.loc[len(df9)] = list8, list9
+    list62=json_data9['runtime']
+    print('Budget '+str(list8)+'\nRevenue '+str(list9)+'\nRuntime '+str(list62))
+    df9.loc[len(df9)] = list8, list9, list62
 
 
-# In[103]:
+# In[20]:
 
 
 final7=pd.concat([newdf3, df9], axis=1, join='inner')
 final7
 
 
-# In[104]:
+# In[21]:
 
 
 final8 = final6.append(final7, ignore_index=True)
 final8
 
 
-# In[105]:
+# In[22]:
 
 
 df966 = pd.DataFrame({'Genres': [],})
@@ -276,86 +284,126 @@ for i in range(len(final8)):
 df966['Genres'] = df966['Genres'].astype(int)    
 
 
-# In[107]:
+# In[23]:
 
 
 df966
 
 
-# In[108]:
+# In[24]:
 
 
 final8=pd.concat([final8, df966], axis=1, join='inner')
 final8
 
 
-# In[109]:
+# In[25]:
 
 
 final8.pop('Genre')
 final8
 
 
-# In[110]:
+# In[26]:
 
 
-final8.info()
+final8=final8.rename(columns={'Genres':'genre_ids'})
+final8
 
 
-# In[111]:
+# In[27]:
+
+
+url12345 = 'https://api.themoviedb.org/3/genre/movie/list?api_key=c680984d1f261c766c61129ac1b932fa'
+response12345 = requests.get(url12345)
+json_data12345 = response12345.json()
+subdict2456=json_data12345['genres']
+df589 = pd.DataFrame.from_dict(subdict2456)
+
+
+# In[28]:
+
+
+df589=df589.rename(columns={'id':'genre_ids'})
+df589
+
+
+# In[29]:
+
+
+merged_df = pd.merge(final8, df589, on='genre_ids')
+
+
+# In[30]:
+
+
+merged_df.pop('genre_ids')
+
+
+# In[31]:
+
+
+merged_df
+
+
+# In[32]:
+
+
+merged_df.info()
+
+
+# In[33]:
 
 
 dataf=pd.read_csv('/Users/15024/Downloads/Spring 23/Capstone/dataimdb.txt', sep='\t')
 dataf
 
 
-# In[112]:
+# In[34]:
 
 
 dataf1=dataf[dataf['averageRating']>3]
-dataf2= dataf1[dataf1['numVotes'] > 2500]  
-dataf3=dataf2.head(n=2000)   #works if i use a lower sample but has an error when i try to do llarge sample.
+dataf2= dataf1[dataf1['numVotes'] > 2000]  
+dataf3=dataf2.sample(n=15000)   #works if i use a lower sample but has an error when i try to do llarge sample.
 dataf3
 
 
-# In[113]:
+# In[35]:
 
 
 dataf99=dataf[dataf['averageRating']>3]
-dataf98=dataf99[dataf99['numVotes']>2500]
-dataf97=dataf98.tail(n=2000)
+dataf98=dataf99[dataf99['numVotes']>2000]
+dataf97=dataf98.tail(n=20000)
 dataf97
 
 
-# In[114]:
+# In[36]:
 
 
 dataf97.info()
 
 
-# In[115]:
+# In[37]:
 
 
 dataf3.info()
 
 
-# In[116]:
+# In[38]:
 
 
 import time
 
 
-# In[117]:
+# In[39]:
 
 
 import pandas as pd
 import json
 
-#pulls data i need for each imdb id in the sample of 500 i took from the large imdb text file. ]
-#this code throws an error for some reason if i try to do a larger sample, i tried to do 1000 but it wouldnt run.
 df99 = pd.DataFrame({'ID': [],
                    'release_date': [],
-                    'popularity':[],'title':[], 'vote_average':[], 'vote_count':[],'Genre':[], 'Budget':[], 'Revenue':[]})
+                    'popularity':[],'title':[], 'vote_average':[], 'vote_count':[],'Genre':[], 'Budget':[], 'Revenue':[], 'Runtime':[]})
 
 for tconst in dataf3['tconst']:
     try:
@@ -371,26 +419,25 @@ for tconst in dataf3['tconst']:
         list97=json_data99['genres']
         list98=json_data99['budget']
         list99=json_data99['revenue']
+        list100=json_data99['runtime']
     
-        df99.loc[len(df99)] = list91, list92, list93,list94,list95,list96,list97,list98,list99
-        time.sleep(.25)
+        df99.loc[len(df99)] = list91, list92, list93,list94,list95,list96,list97,list98,list99,list100
+        time.sleep(.05)
     except:
         pass
     #some ids throw errors. The pass function will skip to the next iteration if this occurs.
 
 
-# In[134]:
+# In[40]:
 
 
 #dont use rn
 import pandas as pd
 import json
 
-#pulls data i need for each imdb id in the sample of 500 i took from the large imdb text file. ]
-#this code throws an error for some reason if i try to do a larger sample, i tried to do 1000 but it wouldnt run.
 df152 = pd.DataFrame({'ID': [],
                    'release_date': [],
-                    'popularity':[],'title':[], 'vote_average':[], 'vote_count':[],'Genre':[], 'Budget':[], 'Revenue':[]})
+                    'popularity':[],'title':[], 'vote_average':[], 'vote_count':[],'Genre':[], 'Budget':[], 'Revenue':[], 'Runtime':[]})
 
 for tconst in dataf97['tconst']:
     try:
@@ -406,71 +453,110 @@ for tconst in dataf97['tconst']:
         list306=json_data152['genres']
         list307=json_data152['budget']
         list308=json_data152['revenue']
+        list349=json_data152['runtime']
     
-        df152.loc[len(df152)] = list300, list301, list302,list303,list304,list305,list306,list307,list308
-        time.sleep(.25)
+        df152.loc[len(df152)] = list300, list301, list302,list303,list304,list305,list306,list307,list308,list349
+        time.sleep(.05)
     except:
         pass
 
 
-# In[68]:
+# In[41]:
 
 
-df99.info() #only 618 out of 675 were put into df.
+df99.info() 
 
 
-# In[69]:
+# In[42]:
 
 
 df152.info()
 
 
-# In[136]:
+# In[43]:
 
 
 df90=df99[df99['Revenue']>0]  #getting rid of any that have no value for budget or revenue reported. 
 df91=df90[df90['Budget']>0]
-df91['ID'] = df91['ID'].astype(int)
-df91['vote_count'] = df91['vote_count'].astype(int)
-df91
+df445=df91[df91['Runtime']>0]
+df445['ID'] = df445['ID'].astype(int)
+df445['vote_count'] = df445['vote_count'].astype(int)
+df445
 
 
-# In[120]:
+# In[44]:
 
 
-df781= (df91.reset_index(drop=True))
+df781= (df445.reset_index(drop=True))
 
 
-# In[121]:
+# In[45]:
 
 
 df781
 
 
-# In[135]:
+# In[46]:
 
 
 # dont use rn
 df400=df152[df152['Revenue']>0]  #getting rid of any that have no value for budget or revenue reported. 
 df401=df400[df400['Budget']>0]
-df401['ID'] = df401['ID'].astype(int)
-df401['vote_count'] = df401['vote_count'].astype(int)
-df401
+df492=df401[df401['Runtime']>0]
+df492['ID'] = df492['ID'].astype(int)
+df492['vote_count'] = df492['vote_count'].astype(int)
+df492
 
 
-# In[145]:
+# In[47]:
 
 
-df782= (df401.reset_index(drop=True))
+df782= (df492.reset_index(drop=True))
 
 
-# In[143]:
+# In[48]:
+
+
+df782.info()
+
+
+# In[49]:
+
+
+df782
+
+
+# In[50]:
+
+
+df782.iloc[671]
+
+
+# In[51]:
+
+
+df782=df782.drop(671)
+
+
+# In[52]:
+
+
+df782= (df782.reset_index(drop=True))
+
+
+# In[53]:
+
+
+df782.info()
+
+
+# In[54]:
 
 
 df781.info()
 
 
-# In[138]:
+# In[55]:
 
 
 df959 = pd.DataFrame({'Genres': [],})
@@ -480,102 +566,69 @@ for i in range(len(df781)):
 df959['Genres'] = df959['Genres'].astype(int)  
 
 
-# In[139]:
+# In[56]:
 
 
 df959
 
 
-# In[146]:
+# In[57]:
 
 
 df976 = pd.DataFrame({'Genres': [],})
 for i in range(len(df782)):
-    list913=(df782['Genre'].str.get(0)[i]['id'])
-    df976.loc[len(df976)] = list913
-df976['Genres'] = df976['Genres'].astype(int)  
+        list9134=(df782['Genre'].str.get(0)[i]['id'])
+        df976.loc[len(df976)] = list9134
+df976['Genres'] = df976['Genres'].astype(int)
 
 
-# In[147]:
+# In[58]:
 
 
 df976
 
 
-# In[148]:
+# In[59]:
 
 
 resultdf = pd.concat([df781.reset_index(drop=True), df959.reset_index(drop=True)], axis=1)
 
 
-# In[150]:
+# In[60]:
 
 
 resultdf2 = pd.concat([df782.reset_index(drop=True), df976.reset_index(drop=True)], axis=1)
 
 
-# In[152]:
+# In[61]:
 
 
 resultdf3 = resultdf.append(resultdf2, ignore_index=True)
 resultdf3
 
 
-# In[153]:
+# In[62]:
 
 
 resultdf3.info()
 
 
-# In[154]:
+# In[63]:
 
 
 resultdf3.pop('Genre')
 
 
-# In[155]:
+# In[64]:
 
 
+resultdf3=resultdf3.rename(columns={'Genres':'genre_ids'})
 resultdf3
 
 
-# In[156]:
+# In[65]:
 
 
-final9 = final8.append(resultdf3, ignore_index=True)
-final9
-
-
-# In[ ]:
-
-
-
-
-
-# In[157]:
-
-
-final9.info()
-
-
-# In[158]:
-
-
-final9['release_date'] = pd.to_datetime(final9['release_date'], format= '%Y/%m/%d')
-
-
-# In[159]:
-
-
-#Getting rid of any dupiclate movies from combining the list.
-final10=final9.drop_duplicates(subset=['ID']) #going to keep null for newer movies so I can see them whenever values are updated.
-final10
-
-
-# In[166]:
-
-
-##Trying to change 
 url100 = 'https://api.themoviedb.org/3/genre/movie/list?api_key=c680984d1f261c766c61129ac1b932fa'
 response100 = requests.get(url100)
 json_data100 = response100.json()
@@ -583,34 +636,79 @@ subdict456=json_data100['genres']
 df89 = pd.DataFrame.from_dict(subdict456)
 
 
-# In[167]:
+# In[66]:
 
 
+df89=df89.rename(columns={'id':'genre_ids'})
 df89
 
 
-# In[168]:
+# In[67]:
 
 
-final111=pd.merge(final9, df89, on = "Genres", how = "inner")
+merged_df2 = pd.merge(resultdf3, df89, on='genre_ids')
+merged_df2
 
 
-# In[204]:
+# In[68]:
 
 
-final10.info()
+merged_df2.pop('genre_ids')
 
 
-# In[205]:
+# In[69]:
+
+
+final9 = merged_df.append(merged_df2, ignore_index=True)
+final9
+
+
+# In[70]:
+
+
+final9.info()
+
+
+# In[71]:
+
+
+final9['release_date'] = pd.to_datetime(final9['release_date'], format= '%Y/%m/%d')
+
+
+# In[72]:
+
+
+final10=final9[final9['Revenue']>100]  #getting rid of any that have no value for budget or revenue reported. 
+final11=final10[final10['Budget']>100]
+final12=final11[final11['Runtime']>1]
+final13=final12[final12['vote_count']>1]
+
+
+# In[73]:
+
+
+#Getting rid of any dupiclate movies from combining the list.
+final14=final13.drop_duplicates(subset=['ID']) #going to keep null for newer movies so I can see them whenever values are updated.
+final15=final14.rename(columns={'name':'Genre'})
+final15
+
+
+# In[74]:
+
+
+final14.info()
+
+
+# In[75]:
 
 
 #Saving df as a csv and opening it.
-final10.to_csv('finaldata', index=False)
+final14.to_csv('finaldata', index=False)
 lastdata=pd.read_csv('finaldata')
 lastdata
 
 
-# In[206]:
+# In[76]:
 
 
 import pandas as pd
@@ -618,21 +716,21 @@ import csv
 import sqlite3
 
 
-# In[207]:
+# In[77]:
 
 
 moviedata=pd.read_csv('finaldata')
 moviedata
 
 
-# In[208]:
+# In[78]:
 
 
 #Connecting to sqlite database
 connection= sqlite3.connect('/Users/15024/Desktop/movies.db')
 
 
-# In[209]:
+# In[79]:
 
 
 print('\nInserting Data to Database')
@@ -649,28 +747,15 @@ moviedata.to_sql(
             'vote_count': 'integer',
             'Budget': 'real',
             'Revenue': 'real',
-            'Genres':'integer'}
+            'Runtime':'real',
+            'Genre':'text'}
         )
 
 
-# In[210]:
+# In[80]:
 
 
 #Save and Close database.
 connection.commit()
 connection.close()
-
-
-# Playing around to find more movies if I have time below this.
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
