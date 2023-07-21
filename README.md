@@ -14,4 +14,4 @@ I then connected to the sqlite program and created a database in a desktop folde
 Finally, I create a table called "Movies" that has the same column names as my merged movie dataframe and set them to the same datatype as well. I can then push my data from python pandas dataframe to the movies.db on Sqlite3 where it will store my data for future data exploration and to build a predictive model that will predict the revenue of a movie.
 
 Project Presentation:
-I created a poster for this project that inlcudes an abstract, objectives of the project, an overview of methods and materials used for the project, as well as results from the project so far. I have no conclusions yet due to the project being a work in progress.
+I created a poster for this project that inlcudes an abstract, objectives of the project, an overview of methods and materials used for the project, as well as results from the project so far. 
